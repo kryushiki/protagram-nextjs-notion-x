@@ -19,7 +19,8 @@
   line-height: 1.5;
   color: rgb(55, 53, 47);
   caret-color: rgb(55, 53, 47);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica,
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica,
     'Apple Color Emoji', Arial, sans-serif, 'Segoe UI Emoji', 'Segoe UI Symbol';
   background-color: var(--bg-color);
 }
@@ -180,16 +181,6 @@
   background: #e5f2e8;
 }
 
-@media (max-width: 1360px) {
-  .githubCorner {
-    display: none;
-  }
-}
-
-.githubCorner:hover .octoArm {
-  animation: octocat-wave 560ms ease-in-out;
-}
-
 @keyframes octocat-wave {
   0%,
   100% {
@@ -202,16 +193,6 @@
   40%,
   80% {
     transform: rotate(10deg);
-  }
-}
-
-@media (max-width: 500px) {
-  .githubCorner:hover .octoArm {
-    animation: none;
-  }
-
-  .githubCorner .octoArm {
-    animation: octocat-wave 560ms ease-in-out;
   }
 }
 
