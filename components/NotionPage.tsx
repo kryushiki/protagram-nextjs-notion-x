@@ -4,7 +4,12 @@ import Image from 'next/legacy/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { type PageBlock } from 'notion-types'
-import { formatDate, getBlockTitle, getPageProperty } from 'notion-utils'
+import {
+  formatDate,
+  getBlockTitle,
+  getPageProperty,
+  normalizeTitle
+} from 'notion-utils'
 import * as React from 'react'
 import BodyClassName from 'react-body-classname'
 import {
@@ -152,11 +157,30 @@ const propertyTextValue = (
   return defaultFn()
 }
 
+const propertySelectValue = (
+  { schema, value, key, pageHeader },
+  defaultFn: () => React.ReactNode
+) => {
+  value = normalizeTitle(value)
+
+  if (pageHeader && schema.type === 'multi_select' && value) {
+    return (
+      <Link href={`/tags/${value}`} key={key}>
+        {defaultFn()}
+      </Link>
+    )
+  }
+
+  return defaultFn()
+}
+
 export function NotionPage({
   site,
   recordMap,
   error,
-  pageId
+  pageId,
+  tagsPage,
+  propertyToFilterName
 }: types.PageProps) {
   const router = useRouter()
   const lite = useSearchParam('lite')
@@ -174,7 +198,8 @@ export function NotionPage({
       Header: NotionPageHeader,
       propertyLastEditedTimeValue,
       propertyTextValue,
-      propertyDateValue
+      propertyDateValue,
+      propertySelectValue
     }),
     []
   )
@@ -220,7 +245,9 @@ export function NotionPage({
     return <Page404 site={site} pageId={pageId} error={error} />
   }
 
-  const title = getBlockTitle(block, recordMap) || site.name
+  const name = getBlockTitle(block, recordMap) || site.name
+  const title =
+    tagsPage && propertyToFilterName ? `${propertyToFilterName} ${name}` : name
 
   console.log('notion page', {
     isDev: config.isDev,
@@ -269,7 +296,8 @@ export function NotionPage({
       <NotionRenderer
         bodyClassName={cs(
           styles.notion,
-          pageId === site.rootNotionPageId && 'index-page'
+          pageId === site.rootNotionPageId && 'index-page',
+          tagsPage && 'tags-page'
         )}
         darkMode={isDarkMode}
         components={components}
@@ -284,11 +312,13 @@ export function NotionPage({
         defaultPageIcon={config.defaultPageIcon}
         defaultPageCover={config.defaultPageCover}
         defaultPageCoverPosition={config.defaultPageCoverPosition}
+        linkTableTitleProperties={false}
         mapPageUrl={siteMapPageUrl}
         mapImageUrl={mapImageUrl}
         searchNotion={config.isSearchEnabled ? searchNotion : null}
         pageAside={pageAside}
         footer={footer}
+        pageTitle={tagsPage && propertyToFilterName ? title : undefined}
       />
 
       <GitHubShareButton />
