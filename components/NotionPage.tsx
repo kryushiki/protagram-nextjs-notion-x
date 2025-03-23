@@ -163,9 +163,31 @@ const propertySelectValue = (
   value = normalizeTitle(value)
 
   if (pageHeader && schema.type === 'multi_select' && value) {
+    const tagObj: { color?: string; description?: string } | undefined =
+      schema.options.find((option) => normalizeTitle(option.value) === value)
     return (
       <Link href={`/tags/${value}`} key={key}>
-        {defaultFn()}
+        {/* {defaultFn()} */}
+        <div
+          className={`notion-property-multi_select-item notion-item-${tagObj?.color}`}
+        >
+          {tagObj?.description || value}
+        </div>
+      </Link>
+    )
+  }
+
+  if (pageHeader && schema.type === 'select' && value) {
+    const categoryObj: { color?: string; description?: string } | undefined =
+      schema.options.find((option) => normalizeTitle(option.value) === value)
+    return (
+      <Link href={`/categories/${value}`} key={key}>
+        {/* {defaultFn()} */}
+        <div
+          className={`notion-property-select-item notion-item-${categoryObj?.color}`}
+        >
+          {categoryObj?.description || value}
+        </div>
       </Link>
     )
   }
@@ -178,7 +200,7 @@ export function NotionPage({
   recordMap,
   error,
   pageId,
-  tagsPage,
+  pageType,
   propertyToFilterName
 }: types.PageProps) {
   const router = useRouter()
@@ -246,7 +268,9 @@ export function NotionPage({
 
   const name = getBlockTitle(block, recordMap) || site.name
   const title =
-    tagsPage && propertyToFilterName ? `${propertyToFilterName} ${name}` : name
+    (pageType === 'tag' || pageType === 'category') && propertyToFilterName
+      ? `${propertyToFilterName} ${name}`
+      : name
 
   console.log('notion page', {
     isDev: config.isDev,
@@ -296,7 +320,7 @@ export function NotionPage({
         bodyClassName={cs(
           styles.notion,
           pageId === site.rootNotionPageId && 'index-page',
-          tagsPage && 'tags-page'
+          (pageType === 'tag' || pageType === 'category') && 'posts-page'
         )}
         darkMode={isDarkMode}
         components={components}
@@ -317,7 +341,7 @@ export function NotionPage({
         searchNotion={config.isSearchEnabled ? searchNotion : null}
         pageAside={pageAside}
         footer={footer}
-        pageTitle={tagsPage && propertyToFilterName ? title : undefined}
+        pageTitle={title}
       />
     </>
   )

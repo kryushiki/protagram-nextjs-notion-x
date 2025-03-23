@@ -6,6 +6,7 @@ export * from 'notion-types'
 
 export type NavigationStyle = 'default' | 'custom'
 
+export type PageType = 'tag' | 'category'
 export interface PageError {
   message?: string
   statusCode: number
@@ -16,7 +17,7 @@ export interface PageProps {
   recordMap?: ExtendedRecordMap
   pageId?: string
   error?: PageError
-  tagsPage?: boolean
+  pageType?: PageType
   propertyToFilterName?: string | string
 }
 
