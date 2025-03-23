@@ -22,19 +22,19 @@
 }
 
 .index-page,
-.tags-page {
+.posts-page {
   --notion-max-width: 900px;
 }
 
-.tags-page .notion-collection-header {
+.posts-page .notion-collection-header {
   display: none;
 }
 
-.tags-page .notion-gallery {
+.posts-page .notion-gallery {
   padding-top: 2em;
 }
 
-.tags-page .notion-gallery-grid {
+.posts-page .notion-gallery-grid {
   padding-top: 4em;
 }
 
@@ -413,6 +413,6 @@
   color: var(--fg-color-2);
 }
 
-.notion-equation.notion-equation-block{
+.notion-equation.notion-equation-block {
   align-items: center;
 }

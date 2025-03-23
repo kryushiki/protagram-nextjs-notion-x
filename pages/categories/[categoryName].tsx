@@ -7,10 +7,10 @@ import React from 'react'
 
 import { NotionPage } from '@/components/NotionPage'
 
-const tagsPropertyNameLowerCase = 'tags'
+const categoriesPropertyNameLowerCase = 'category'
 
 export const getStaticProps = async (context) => {
-  const rawTagName = (context.params.tagName as string) || ''
+  const rawCategoryName = (context.params.categoryName as string) || ''
 
   try {
     const props = await resolveNotionPage(domain, rootNotionPageId)
@@ -43,10 +43,10 @@ export const getStaticProps = async (context) => {
             const propertyToFilter = Object.entries(collection.schema).find(
               (property) =>
                 (property[1] as { name?: string })?.name?.toLowerCase() ===
-                tagsPropertyNameLowerCase
+                categoriesPropertyNameLowerCase
             )
             const propertyToFilterId = propertyToFilter?.[0]
-            const filteredValue = normalizeTitle(rawTagName)
+            const filteredValue = normalizeTitle(rawCategoryName)
             propertyToFilterName = (
               propertyToFilter?.[1] as { options: { value: string }[] }
             )?.options.find(
@@ -92,13 +92,13 @@ export const getStaticProps = async (context) => {
     return {
       props: {
         ...props,
-        pageType: 'tag',
+        pageType: 'category',
         propertyToFilterName
       },
       revalidate: 10
     }
   } catch (err) {
-    console.error('page error', domain, rawTagName, err)
+    console.error('page error', domain, rawCategoryName, err)
 
     // we don't want to publish the error version of this page, so
     // let next.js know explicitly that incremental SSG failed
@@ -120,13 +120,13 @@ export async function getStaticPaths() {
         ).find(
           (property) =>
             (property[1] as { name?: string })?.name?.toLowerCase() ===
-            tagsPropertyNameLowerCase
+            categoriesPropertyNameLowerCase
         )?.[1]
 
         const paths = propertyToFilterSchema.options
           .map((option) => normalizeTitle(option.value))
           .filter(Boolean)
-          .map((slug) => `/tags/${slug}`)
+          .map((slug) => `/categories/${slug}`)
 
         return {
           paths,
@@ -142,6 +142,6 @@ export async function getStaticPaths() {
   }
 }
 
-export default function NotionTagsPage(props) {
+export default function NotionCategoriesPage(props) {
   return <NotionPage {...props} />
 }

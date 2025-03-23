@@ -170,6 +170,14 @@ const propertySelectValue = (
     )
   }
 
+  if (pageHeader && schema.type === 'select' && value) {
+    return (
+      <Link href={`/categories/${value}`} key={key}>
+        {defaultFn()}
+      </Link>
+    )
+  }
+
   return defaultFn()
 }
 
@@ -178,7 +186,7 @@ export function NotionPage({
   recordMap,
   error,
   pageId,
-  tagsPage,
+  pageType,
   propertyToFilterName
 }: types.PageProps) {
   const router = useRouter()
@@ -246,7 +254,9 @@ export function NotionPage({
 
   const name = getBlockTitle(block, recordMap) || site.name
   const title =
-    tagsPage && propertyToFilterName ? `${propertyToFilterName} ${name}` : name
+    (pageType === 'tag' || pageType === 'category') && propertyToFilterName
+      ? `${propertyToFilterName} ${name}`
+      : name
 
   console.log('notion page', {
     isDev: config.isDev,
@@ -296,7 +306,7 @@ export function NotionPage({
         bodyClassName={cs(
           styles.notion,
           pageId === site.rootNotionPageId && 'index-page',
-          tagsPage && 'tags-page'
+          (pageType === 'tag' || pageType === 'category') && 'posts-page'
         )}
         darkMode={isDarkMode}
         components={components}
@@ -317,7 +327,7 @@ export function NotionPage({
         searchNotion={config.isSearchEnabled ? searchNotion : null}
         pageAside={pageAside}
         footer={footer}
-        pageTitle={tagsPage && propertyToFilterName ? title : undefined}
+        pageTitle={title}
       />
     </>
   )
