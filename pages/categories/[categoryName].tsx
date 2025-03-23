@@ -47,11 +47,14 @@ export const getStaticProps = async (context) => {
             )
             const propertyToFilterId = propertyToFilter?.[0]
             const filteredValue = normalizeTitle(rawCategoryName)
-            propertyToFilterName = (
-              propertyToFilter?.[1] as { options: { value: string }[] }
-            )?.options.find(
-              (option) => normalizeTitle(option.value) === filteredValue
-            )?.value
+            propertyToFilterName =
+              (
+                propertyToFilter?.[1] as {
+                  options: { value: string; description: string }[]
+                }
+              )?.options.find(
+                (option) => normalizeTitle(option.value) === filteredValue
+              )?.description || filteredValue
 
             if (propertyToFilterId && filteredValue) {
               const query =
