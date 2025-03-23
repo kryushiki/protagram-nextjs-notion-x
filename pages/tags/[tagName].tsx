@@ -18,16 +18,18 @@ export const getStaticProps = async (context) => {
 
     if ((props as any).recordMap) {
       const recordMap = (props as any).recordMap as ExtendedRecordMap
-      const collection = Object.values(recordMap.collection)[0]?.value
+      const collection = (Object.values(recordMap.collection)[0] as any)?.value
 
       if (collection) {
-        const galleryView = Object.values(recordMap.collection_view).find(
-          (view) => view.value?.type === 'gallery'
+        const galleryView = (
+          Object.values(recordMap.collection_view).find(
+            (view: any) => view.value?.type === 'gallery'
+          ) as any
         )?.value
 
         if (galleryView) {
-          const galleryBlock = Object.values(recordMap.block).find(
-            (block) =>
+          const galleryBlock: any = Object.values(recordMap.block).find(
+            (block: any) =>
               block.value?.type === 'collection_view' &&
               block.value.view_ids?.includes(galleryView.id)
           )
@@ -40,11 +42,14 @@ export const getStaticProps = async (context) => {
 
             const propertyToFilter = Object.entries(collection.schema).find(
               (property) =>
-                property[1]?.name?.toLowerCase() === tagsPropertyNameLowerCase
+                (property[1] as { name?: string })?.name?.toLowerCase() ===
+                tagsPropertyNameLowerCase
             )
             const propertyToFilterId = propertyToFilter?.[0]
             const filteredValue = normalizeTitle(rawTagName)
-            propertyToFilterName = propertyToFilter?.[1]?.options.find(
+            propertyToFilterName = (
+              propertyToFilter?.[1] as { options: { value: string }[] }
+            )?.options.find(
               (option) => normalizeTitle(option.value) === filteredValue
             )?.value
 
@@ -107,12 +112,15 @@ export async function getStaticPaths() {
 
     if ((props as any).recordMap) {
       const recordMap = (props as any).recordMap as ExtendedRecordMap
-      const collection = Object.values(recordMap.collection)[0]?.value
+      const collection = (Object.values(recordMap.collection)[0] as any)?.value
 
       if (collection) {
-        const propertyToFilterSchema = Object.entries(collection.schema).find(
+        const propertyToFilterSchema: any = Object.entries(
+          collection.schema
+        ).find(
           (property) =>
-            property[1]?.name?.toLowerCase() === tagsPropertyNameLowerCase
+            (property[1] as { name?: string })?.name?.toLowerCase() ===
+            tagsPropertyNameLowerCase
         )?.[1]
 
         const paths = propertyToFilterSchema.options
