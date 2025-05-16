@@ -163,31 +163,17 @@ const propertySelectValue = (
   value = normalizeTitle(value)
 
   if (pageHeader && schema.type === 'multi_select' && value) {
-    const tagObj: { color?: string; description?: string } | undefined =
-      schema.options.find((option) => normalizeTitle(option.value) === value)
     return (
       <Link href={`/tags/${value}`} key={key}>
-        {/* {defaultFn()} */}
-        <div
-          className={`notion-property-multi_select-item notion-item-${tagObj?.color}`}
-        >
-          {tagObj?.description || value}
-        </div>
+        {defaultFn()}
       </Link>
     )
   }
 
   if (pageHeader && schema.type === 'select' && value) {
-    const categoryObj: { color?: string; description?: string } | undefined =
-      schema.options.find((option) => normalizeTitle(option.value) === value)
     return (
       <Link href={`/categories/${value}`} key={key}>
-        {/* {defaultFn()} */}
-        <div
-          className={`notion-property-select-item notion-item-${categoryObj?.color}`}
-        >
-          {categoryObj?.description || value}
-        </div>
+        {defaultFn()}
       </Link>
     )
   }
@@ -269,7 +255,7 @@ export function NotionPage({
   const name = getBlockTitle(block, recordMap) || site.name
   const title =
     (pageType === 'tag' || pageType === 'category') && propertyToFilterName
-      ? `${propertyToFilterName} ${name}`
+      ? `${propertyToFilterName}`
       : name
 
   console.log('notion page', {
