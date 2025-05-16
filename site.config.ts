@@ -9,20 +9,20 @@ export default siteConfig({
   rootNotionSpaceId: null,
 
   // basic site info (required)
-  name: 'Protagram',
-  domain: 'protagram.com',
-  author: 'マーロン',
+  name: 'MarlonPicks',
+  domain: 'marlonpicks.com',
+  author: 'Marlon',
 
   // open graph metadata (optional)
-  description: '主にプログラミングについてのテック記事、多々マーロンの雑多な日常を書いていきます。',
+  description: 'マーロンのオススメ商品、オススメ旅行先など紹介するブログです。',
 
   // social usernames (optional)
-  twitter: 'web_ok_marlon',
+  twitter: 'marlon_picks',
   github: '',
   linkedin: '',
   // mastodon: '#', // optional mastodon profile URL, provides link verification
   // newsletter: '#', // optional newsletter URL
-  // youtube: '#', // optional youtube channel name or `channel/UCGbXXXXXXXXXXXXXXXXXXXXXX`
+  youtube: '@MarlonPicks', // optional youtube channel name or `channel/UCGbXXXXXXXXXXXXXXXXXXXXXX`
 
   // default notion icon and cover images for site-wide consistency (optional)
   // page-specific values will override these site-wide defaults
